@@ -2,6 +2,8 @@ import numpy as np
 
 # representing polynomial 
 # ax^n + bx^(n-1) + cx^(n-2) becomes [c, b, a]
+# navie evaluation  --> O(n^n)
+# horner's rule evalution --> O(n)
 
 # helper functions
 def printPolynomial(coefficients):
