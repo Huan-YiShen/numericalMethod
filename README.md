@@ -15,3 +15,7 @@ Approximate of solutions to analytic equations<br>
 
 export new requirements <br>
 `$ pip freeze > requirements.txt`
+
+## Demo
+https://user-images.githubusercontent.com/76965211/218351217-bfea2846-e9d4-4f40-a3e9-78c4cf2c21d8.mp4
+
