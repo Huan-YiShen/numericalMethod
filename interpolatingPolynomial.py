@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 # evaluate interpolating polynomial at a point close to x_k
 # extimate the derivative at the point x_k
 # estimate an integral from some point x_k-n up to x_k
@@ -13,7 +14,17 @@ class Point:
     self.x = x
     self.y = y
 
-def linear_interpolation(p1, p2, x):
+def add_line_to_plot(plt, p1, p2, startPoint, endPoint):
+    a = (p2.y-p1.y)/(p2.x-p1.x)
+    b = p2.y - a*p2.x
+
+    x = [startPoint, endPoint]
+    y = [a*startPoint+b, a*endPoint+b]
+    
+    plt.plot(x, y, color='blue', label='linear')
+
+
+def linear_interpolation(p1, p2, x, soln = 2):
     # interpolates a expression (f or curve) with a line that goes through 2 points on the curve
     # solution 1: using 2 arbitrary points on the curve (x1, f(x1)) and (x2, f(x2)), 
     #   find a line that goes through the 2 points. This is not precise because
@@ -34,26 +45,62 @@ def linear_interpolation(p1, p2, x):
             return -999
 
     h = abs(x2-x1)
-    # term1 = (y2-y1)/(x2-x1)*x
-    # term2 = (y1*x2 - y2*x1)/(x2-x1)
-
-    delta = (x-(x1+x2)/2)/h
-    term1 = (y2-y1)*delta
-    term2 = (y1+y2)/2
+    
+    if soln == 1:
+        term1 = (y2-y1)/(x2-x1)*x
+        term2 = (y1*x2 - y2*x1)/(x2-x1)
+    else:
+        delta = (x-(x1+x2)/2)/h
+        term1 = (y2-y1)*delta
+        term2 = (y1+y2)/2
     
     return (term1 + term2)
 
+def linear_interpolation_iteration_example(plt, x_start, x_end, interpolating_interval, iteration):
+    # Naming the x-axis, y-axis and the whole graph
+    plt.title("Linear Interpolation")
+    plt.xlabel("input")
+    plt.ylabel("output")
+    # plt.legend()
 
-ax = 1
-ay = 1
-bx = 2
-by = 2
-p1 = Point(ax, ay)
-p2 = Point(bx, by)
+    # getting 2 points for interpolation
+    iteration = iteration
+    interval = (int(x_start)+1 + int(x_end)-1)/iteration
+    for i in range(iteration):
+        # setting 2 points for interpolation
+        ax = 0 + interval*i
+        bx = interpolating_interval + interval*i
+        ay = np.sin(ax)
+        by = np.sin(bx)
+        place_to_estimate = (ax+bx)/2
+        p1 = Point(ax, ay)
+        p2 = Point(bx, by)
 
-estm = linear_interpolation(p1, p2, 1.7);
+        # perform interpolation to determine new points
+        add_line_to_plot(plt, p1, p2, x_start, x_end)
+        # plt.plot(ax, ay, marker='o', markerfacecolor='red', markersize=3)
+        # plt.plot(bx, by, marker='o', markerfacecolor='red', markersize=3)
 
-if (estm == -999):
-    print("linear interpolation should be used if the estimated point is between give points")
-else:
-    print("estimation is {}".format(estm));
+        estm_res = linear_interpolation(p1, p2, place_to_estimate, 1);
+        estm_res_with_rescaling = linear_interpolation(p1, p2, place_to_estimate);
+        plt.plot(place_to_estimate, estm_res_with_rescaling, 
+                marker='o', markerfacecolor='blue', markersize=5)
+        plt.pause(0.05)
+
+    if (estm_res == -999):
+        print("linear interpolation should be used if the estimated point is between give points")
+    else:
+        print("estimation is {}".format(estm_res))
+
+# ##########################################################
+# ##########################################################
+
+# ploying sin function from from 0 to 2pi, between 0.1
+x_start = 0
+x_end = 2*(np.pi)/2
+x = np.arange(x_start, x_end, 0.1)
+y = np.sin(x)
+plt.plot(x, y, color = 'r', label='sine wave')
+
+linear_interpolation_iteration_example(plt, x_start, x_end, 0.01, 20)
+plt.show()
