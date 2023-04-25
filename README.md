@@ -1,4 +1,4 @@
-# numerical Method - The art of approximation
+# Numerical Method - The Art of Approximation
 implement various classic numerical algorithms 
 
 This repository is inspired by the course ECE204 from the University of Waterloo. The organization of its content will closely follow the ECE204 course taught by Lecturer D.W. Harder. The repository will implement various numerical algorithms to approximate following categories of mathematic objects
